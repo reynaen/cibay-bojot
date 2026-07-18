@@ -49,36 +49,3 @@ cibay_bojot/
     ├── css/style.css        # Styling tema merah-emas Cibay Bojot
     └── js/script.js
 ```
-
-## Catatan Teknis
-- Data keranjang disimpan di **Flask session** (tidak perlu database) — cukup untuk scope tugas praktikum ini.
-- Validasi checkout dilakukan di **dua sisi**: client-side (HTML5 + Bootstrap `was-validated`) dan server-side (regex nomor HP & email, panjang minimal field) di `app.py`.
-- Harga produk, level pedas, dan topping didefinisikan sebagai data statis di `app.py` (dictionary `PRODUCT`) — mudah diedit kalau mau ganti brand/produk lain.
-
-## Deploy ke Render (gratis)
-1. Push project ini ke GitHub (lihat langkah di bawah).
-2. Buka [render.com](https://render.com) → New → Web Service → hubungkan repo GitHub kamu.
-3. Build Command: `pip install -r requirements.txt`
-4. Start Command: `gunicorn app:app`
-5. Deploy, lalu catat URL yang diberikan Render untuk dilampirkan di laporan.
-
-## Push ke GitHub
-```bash
-git init
-git add .
-git commit -m "Cibay Bojot - Flask e-commerce app"
-git branch -M main
-git remote add origin https://github.com/USERNAME/cibay-bojot.git
-git push -u origin main
-```
-(Ganti `USERNAME` dengan username GitHub kamu, dan buat repo baru bernama `cibay-bojot` dulu di GitHub sebelum push.)
-
-## Yang Masih Perlu Kamu Lengkapi
-Sesuai poin-poin tugas, ini yang belum termasuk di source code dan perlu kamu kerjakan sendiri:
-- [ ] Ganti mascot/emoji dengan asset grafis asli (boleh dari Freepik) sesuai instruksi tugas poin 6
-- [ ] Upload asset ke Google Drive, lampirkan link di laporan
-- [ ] Deploy ke Heroku/Render
-- [ ] Push source code ke GitHub
-- [ ] Buat laporan project (.doc & .pdf) — aku bisa bantu buatkan pakai template yang sudah disediakan
-- [ ] Rekam video tutorial, upload ke channel YouTube `praktikumsismul_[nama kamu]`
-- [ ] Lampirkan semua link (GitHub, deploy, drive, YouTube) di laporan
