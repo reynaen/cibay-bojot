@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Selesai - Cibay Bojot{% endblock %}
+{% block content %}
+
+<div class="complete-state">
+  <div class="complete-icon">✔️</div>
+  <h2 class="complete-title">Pesanan Berhasil! 🎉</h2>
+  <p class="text-muted mb-0">Terima kasih sudah order Cibay Bojot!</p>
+  <p class="text-muted">Pesananmu sedang kami proses. Siap-siap nagih! 🔥🍢</p>
+
+  <div class="order-info-box">
+    <div class="d-flex justify-content-between align-items-start flex-wrap">
+      <div>
+        <p class="text-muted small mb-1">ID PESANAN</p>
+        <p class="order-id">{{ order.order_id }}</p>
+        <p class="mb-1"><span class="text-muted">Penerima</span></p>
+        <p class="mb-1"><span class="text-muted">Total Bayar</span></p>
+        <p class="mb-1"><span class="text-muted">Metode Bayar</span></p>
+        <p class="mb-1"><span class="text-muted">Status</span></p>
+        <p class="mb-0"><span class="text-muted">Estimasi Tiba</span></p>
+      </div>
+      <div class="text-md-end">
+        <p class="mb-1 fw-semibold">&nbsp;</p>
+        <p class="mb-1 fw-semibold">{{ order.nama }}</p>
+        <p class="mb-1 fw-semibold text-cibay">{{ order.total | rupiah }}</p>
+        <p class="mb-1 fw-semibold">{{ order.metode_bayar }}</p>
+        <p class="mb-1 fw-semibold text-success">✅ Dikonfirmasi</p>
+        <p class="mb-0 fw-semibold">Hari ini, 60–90 menit</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-grid gap-2 mt-3">
+    <a href="#" class="btn btn-cibay btn-lg">📍 Lacak Pesanan</a>
+    <a href="{{ url_for('home') }}" class="btn btn-cibay-outline">🏠 Kembali ke Beranda</a>
+  </div>
+</div>
+
+{% endblock %}

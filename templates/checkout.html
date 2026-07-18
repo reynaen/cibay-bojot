@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Checkout - Cibay Bojot{% endblock %}
+{% block content %}
+
+<h2 class="page-title">🧾 Checkout</h2>
+
+<form method="POST" novalidate id="checkout-form">
+  <div class="form-card">
+    <h3 class="form-card-title">👤 Data Penerima</h3>
+
+    <div class="mb-3">
+      <label class="field-label">Nama Lengkap</label>
+      <input type="text" name="nama" class="form-control {{ 'is-invalid' if errors.get('nama') }}"
+             value="{{ form.get('nama', '') }}" placeholder="Nama lengkap" required minlength="3">
+      {% if errors.get('nama') %}<div class="invalid-feedback">{{ errors.get('nama') }}</div>{% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label class="field-label">Nomor HP / Whatsapp</label>
+      <input type="text" name="hp" class="form-control {{ 'is-invalid' if errors.get('hp') }}"
+             value="{{ form.get('hp', '') }}" placeholder="08xxxxxxxxxx" required
+             pattern="^(08|\+62|62)[0-9]{8,13}$">
+      {% if errors.get('hp') %}<div class="invalid-feedback">{{ errors.get('hp') }}</div>{% endif %}
+    </div>
+
+    <div class="mb-1">
+      <label class="field-label">Email</label>
+      <input type="email" name="email" class="form-control {{ 'is-invalid' if errors.get('email') }}"
+             value="{{ form.get('email', '') }}" placeholder="nama@email.com" required>
+      {% if errors.get('email') %}<div class="invalid-feedback">{{ errors.get('email') }}</div>{% endif %}
+    </div>
+  </div>
+
+  <div class="form-card">
+    <h3 class="form-card-title">📍 Alamat Pengiriman</h3>
+
+    <div class="mb-3">
+      <label class="field-label">Alamat Lengkap</label>
+      <textarea name="alamat" class="form-control {{ 'is-invalid' if errors.get('alamat') }}" rows="2"
+                placeholder="Nama jalan, blok, RT/RW" required minlength="10">{{ form.get('alamat', '') }}</textarea>
+      {% if errors.get('alamat') %}<div class="invalid-feedback">{{ errors.get('alamat') }}</div>{% endif %}
+    </div>
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="field-label">Kelurahan</label>
+        <input type="text" name="kelurahan" class="form-control {{ 'is-invalid' if errors.get('kelurahan') }}"
+               value="{{ form.get('kelurahan', '') }}" required>
+        {% if errors.get('kelurahan') %}<div class="invalid-feedback">{{ errors.get('kelurahan') }}</div>{% endif %}
+      </div>
+      <div class="col-md-6">
+        <label class="field-label">Kecamatan</label>
+        <input type="text" name="kecamatan" class="form-control {{ 'is-invalid' if errors.get('kecamatan') }}"
+               value="{{ form.get('kecamatan', '') }}" required>
+        {% if errors.get('kecamatan') %}<div class="invalid-feedback">{{ errors.get('kecamatan') }}</div>{% endif %}
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="field-label">Kota / Kabupaten</label>
+      <input type="text" name="kota" class="form-control {{ 'is-invalid' if errors.get('kota') }}"
+             value="{{ form.get('kota', '') }}" required>
+      {% if errors.get('kota') %}<div class="invalid-feedback">{{ errors.get('kota') }}</div>{% endif %}
+    </div>
+
+    <div class="mb-1">
+      <label class="field-label">Catatan untuk Penjual</label>
+      <input type="text" name="catatan" class="form-control" value="{{ form.get('catatan', '') }}"
+             placeholder="Contoh: jangan terlalu kering, dll.">
+    </div>
+  </div>
+
+  <div class="form-card">
+    <h3 class="form-card-title">💳 Metode Pembayaran</h3>
+    <select name="metode_bayar" class="form-select">
+      <option value="Transfer Bank / QRIS" selected>Transfer Bank / QRIS</option>
+      <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
+    </select>
+  </div>
+
+  <div class="order-summary-box">
+    <h3 class="form-card-title">🧾 Ringkasan Pesanan</h3>
+    {% for item in cart %}
+    <div class="d-flex justify-content-between small mb-1">
+      <span>{{ item.product_name }} ({{ item.level }}) &times; {{ item.qty }}</span>
+      <span>{{ item.subtotal | rupiah }}</span>
+    </div>
+    {% endfor %}
+    <div class="d-flex justify-content-between small text-muted">
+      <span>Ongkos Kirim</span>
+      <span>{{ ongkir | rupiah }}</span>
+    </div>
+    <hr>
+    <div class="d-flex justify-content-between fw-bold">
+      <span>Total</span>
+      <span class="text-cibay">{{ grand_total | rupiah }}</span>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-cibay btn-lg w-100">✅ Konfirmasi Pesanan →</button>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Bootstrap client-side validation feedback
+  (() => {
+    const form = document.getElementById('checkout-form');
+    form.addEventListener('submit', (event) => {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    }, false);
+  })();
+</script>
+{% endblock %}

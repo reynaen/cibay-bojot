@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Pesan - Cibay Bojot{% endblock %}
+{% block content %}
+
+<div class="hero-banner">
+  <div class="hero-banner-text">
+    <div class="hero-badge">🔥 STREET FOOD KEKINIAN</div>
+    <h2 class="hero-banner-title">Cibay <span class="text-accent">Gurih &amp; Pedas</span><br>Bikin Nagih</h2>
+    <p>{{ product.description }}</p>
+    <div class="hero-price">Harga <strong>{{ product.price | rupiah }}</strong> / pcs</div>
+    <a href="#form-pesan" class="btn btn-cibay-light mt-2">PESAN SEKARANG 🔥</a>
+  </div>
+  <div class="hero-banner-mascot">
+  <img src="{{ url_for('static', filename='img/mascot.png') }}" alt="Cibay Bojot Mascot">
+</div>
+</div>
+
+<div class="level-strip">
+  <span>Level 1 🌶️ Aman</span>
+  <span>Level 2 🌶️🌶️ Nampol</span>
+  <span>Level 3 🌶️🌶️🌶️ Bojot!</span>
+</div>
+
+<form method="POST" id="form-pesan" class="order-form" novalidate>
+  <div class="form-card">
+    <h3 class="form-card-title">🍢 Pesan</h3>
+    <p class="text-muted small">Sesuaikan pesananmu di bawah</p>
+
+    <label class="field-label">🌶️ Pilih Level Chili Oil</label>
+    <div class="level-options">
+      {% for level in product.levels %}
+      <label class="level-option {{ 'selected' if form.get('level') == level.id }}">
+        <input type="radio" name="level" value="{{ level.id }}" {{ 'checked' if form.get('level') == level.id }} required>
+        <span class="level-option-label">{{ level.label }}</span>
+        <span class="level-option-desc">{{ level.desc }}</span>
+      </label>
+      {% endfor %}
+    </div>
+
+      <label class="field-label mt-3">🥓 Topping Gratis <span class="text-muted fw-normal">(boleh pilih satu atau keduanya)</span></label>
+    <div class="topping-options">
+      {% for topping in product.toppings %}
+      <label class="topping-option {{ 'selected' if topping.id in selected_toppings }}">
+        <input type="checkbox" name="topping" value="{{ topping.id }}" {{ 'checked' if topping.id in selected_toppings }}>
+        <span>{{ topping.label }}</span>
+        <span class="text-cibay small">Gratis</span>
+      </label>
+      {% endfor %}
+    </div>
+
+
+    <label class="field-label mt-3">🔢 Jumlah (pcs)</label>
+    <div class="qty-control">
+      <button type="button" class="qty-btn" id="qty-minus">−</button>
+      <input type="number" name="qty" id="qty-input" value="{{ form.get('qty', 1) }}" min="1" max="100" required>
+      <button type="button" class="qty-btn" id="qty-plus">+</button>
+      <span class="text-muted ms-2">{{ product.price | rupiah }}/pcs</span>
+    </div>
+
+    <div class="total-box">
+      <span>Total Harga</span>
+      <span class="total-value" id="total-harga">{{ product.price | rupiah }}</span>
+    </div>
+
+    <button type="submit" class="btn btn-cibay w-100 mt-3">+ Tambah ke Keranjang</button>
+  </div>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const price = {{ product.price }};
+  const qtyInput = document.getElementById('qty-input');
+  const totalEl = document.getElementById('total-harga');
+
+  function formatRupiah(n) {
+    return "Rp. " + n.toLocaleString('id-ID');
+  }
+
+  function updateTotal() {
+    let qty = parseInt(qtyInput.value) || 0;
+    totalEl.textContent = formatRupiah(price * qty);
+  }
+
+  document.getElementById('qty-minus').addEventListener('click', () => {
+    let v = Math.max(1, (parseInt(qtyInput.value) || 1) - 1);
+    qtyInput.value = v;
+    updateTotal();
+  });
+  document.getElementById('qty-plus').addEventListener('click', () => {
+    let v = Math.min(100, (parseInt(qtyInput.value) || 1) + 1);
+    qtyInput.value = v;
+    updateTotal();
+  });
+  qtyInput.addEventListener('input', updateTotal);
+
+  document.querySelectorAll('.level-option input').forEach(input => {
+    input.addEventListener('change', () => {
+      document.querySelectorAll('.level-option').forEach(l => l.classList.remove('selected'));
+      input.closest('label').classList.add('selected');
+    });
+  });
+
+  document.querySelectorAll('.topping-option input').forEach(input => {
+    input.addEventListener('change', () => {
+      input.closest('label').classList.toggle('selected', input.checked);
+    });
+  });
+
+  updateTotal();
+</script>
+{% endblock %}
